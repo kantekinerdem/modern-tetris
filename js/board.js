@@ -1,0 +1,7 @@
+import{rotateMatrix}from'./pieces.js';
+export const COLS=10,ROWS=20;export const createBoard=()=>Array.from({length:ROWS},()=>Array(COLS).fill(null));
+export function collides(board,p,dx=0,dy=0,m=p.matrix){for(let y=0;y<m.length;y++)for(let x=0;x<m[y].length;x++)if(m[y][x]){const bx=p.x+x+dx,by=p.y+y+dy;if(bx<0||bx>=COLS||by>=ROWS||(by>=0&&board[by][bx]))return true;}return false;}
+const N={'0>1':[[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]],'1>0':[[0,0],[1,0],[1,-1],[0,2],[1,2]],'1>2':[[0,0],[1,0],[1,-1],[0,2],[1,2]],'2>1':[[0,0],[-1,0],[-1,1],[0,-2],[-1,-2]],'2>3':[[0,0],[1,0],[1,1],[0,-2],[1,-2]],'3>2':[[0,0],[-1,0],[-1,-1],[0,2],[-1,2]],'3>0':[[0,0],[-1,0],[-1,-1],[0,2],[-1,2]],'0>3':[[0,0],[1,0],[1,1],[0,-2],[1,-2]]};
+const I={'0>1':[[0,0],[-2,0],[1,0],[-2,-1],[1,2]],'1>0':[[0,0],[2,0],[-1,0],[2,1],[-1,-2]],'1>2':[[0,0],[-1,0],[2,0],[-1,2],[2,-1]],'2>1':[[0,0],[1,0],[-2,0],[1,-2],[-2,1]],'2>3':[[0,0],[2,0],[-1,0],[2,1],[-1,-2]],'3>2':[[0,0],[-2,0],[1,0],[-2,-1],[1,2]],'3>0':[[0,0],[1,0],[-2,0],[1,-2],[-2,1]],'0>3':[[0,0],[-1,0],[2,0],[-1,2],[2,-1]]};
+export function tryRotate(board,p,cw=true){const from=p.rotation,to=(from+(cw?1:3))%4,m=rotateMatrix(p.matrix,cw);if(p.type==='O'){p.matrix=m;p.rotation=to;return true;}for(const[dx,dy]of(p.type==='I'?I:N)[`${from}>${to}`])if(!collides(board,p,dx,-dy,m)){p.x+=dx;p.y-=dy;p.matrix=m;p.rotation=to;return true;}return false;}
+export function clearLines(b){let n=0;for(let y=ROWS-1;y>=0;y--)if(b[y].every(Boolean)){b.splice(y,1);b.unshift(Array(COLS).fill(null));n++;y++;}return n;}

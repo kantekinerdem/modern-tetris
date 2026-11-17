@@ -1,0 +1,1 @@
+const KEY='neon-tetris-settings-v1';export function loadSettings(){try{const x=JSON.parse(localStorage.getItem(KEY)||'{}');return{best:Number.isFinite(x.best)&&x.best>=0?x.best:0,sound:x.sound!==false};}catch{return{best:0,sound:true};}}export function saveSettings(x){try{localStorage.setItem(KEY,JSON.stringify({best:x.best,sound:x.sound}));}catch{}}
